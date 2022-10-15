@@ -8,6 +8,16 @@ import ExpLang._
 object ELInterp {
   case class InterpException(string: String) extends RuntimeException
 
+  def boolOrError(e: Either[Boolean, Int]): Either[Boolean, Int] = e match {
+    case Left(b) => Left(b)
+    case _ => InterpException("We need a bool but we got: " + e)
+  }
+
+  def intOrError(e: Either[Boolean, Int]): Either[Boolean, Int] = e match {
+    case Right(i) => Right(i)
+    case _ => InterpException("We need an int but we got: " + e)
+  }
+  
   def interp(e:Expr): Either[Boolean,Int] = e match {
     case True => Left(true)
     case False => Left(false)
@@ -37,9 +47,7 @@ object ELInterp {
     // case Rem(l,r) => // ... need code ...
     // case Lt(l,r) => // ... need code ...
     // case Gt(l,r) => // ... need code ...
-    case Eq(l,r) => {
-      
-      }// ... need code ...
+    // case Eq(l,r) => {}// ... need code ...
     // case If(c,l,r) => // ... need code ... 
     case _ => throw InterpException("Illegal expr:" + e)
   }
