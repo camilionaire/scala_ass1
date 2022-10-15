@@ -8,38 +8,30 @@ import ExpLang._
 object ELInterp {
   case class InterpException(string: String) extends RuntimeException
 
-  def boolOrError(e: Either[Boolean, Int]): Either[Boolean, Int] = e match {
-    case Left(b) => Left(b)
-    case _ => InterpException("We need a bool but we got: " + e)
+  // unwraping function, throws an error if not a left, 
+  // returns the 
+  def boolOrError(e: Either[Boolean, Int]): Boolean = e match {
+    case Left(b) => b
+    case _ => throw InterpException("We need a bool but we got: " + e)
   }
 
-  def intOrError(e: Either[Boolean, Int]): Either[Boolean, Int] = e match {
-    case Right(i) => Right(i)
-    case _ => InterpException("We need an int but we got: " + e)
+  def intOrError(e: Either[Boolean, Int]): Int = e match {
+    case Right(i) => i
+    case _ => throw InterpException("We need an int but we got: " + e)
   }
   
   def interp(e:Expr): Either[Boolean,Int] = e match {
     case True => Left(true)
     case False => Left(false)
     case Num(n) => Right(n)
-    case Not(e)  => {
-      interp(e) match {
-        case Left(true) => Left(false)
-        case Left(false) => Left(true)
-        case _ => throw InterpException("Can only not a bool: " + e)
-      }
+    case Not(e)  => Left(! boolOrError(interp(e))) // done
+    case And(l,r) => Left(boolOrError(interp(l)) && boolOrError(interp(r))) // done
+    case Or(l,r)  => Left(boolOrError(interp(l)) || boolOrError(interp(r))) // done
+    case Xor(l,r) => {
+      val lft = boolOrError(interp(l))
+      val rgt = boolOrError(interp(r))
+      Left((lft && (!rgt)) || ((!lft) && rgt))
       }// ... need code ...
-    case And(l,r) => {
-      val left = interp(l)
-      val right = interp(r)
-      val cl = left match {
-        case Left
-      }
-      
-
-      }// ... need code ...
-    // case Or(l,r)  => // ... need code ...
-    // case Xor(l,r) => // ... need code ...
     // case Add(l,r) => // ... need code ...
     // case Sub(l,r) => // ... need code ...
     // case Mul(l,r) => // ... need code ...
