@@ -32,22 +32,22 @@ class TestELC extends FunSuite {
     assertResult(1)(ELComp("(and 1 t)"))
   }
 	
-  // test("correctly compile integer expressions") {
-  //   assertResult(2)(ELComp("(+ 1 (- 3 2))"))
-  //   assertResult(11)(ELComp("(+ 1 (* 5 (- 4 2)))"))
-  //   assertResult(9)(ELComp("(- (* 2 5) (% 7 3))"))
-  //   assertResult(2)(ELComp("(+ 1 t)"))
-  // } 
+  test("correctly compile integer expressions") {
+    assertResult(2)(ELComp("(+ 1 (- 3 2))"))
+    assertResult(11)(ELComp("(+ 1 (* 5 (- 4 2)))"))
+    assertResult(9)(ELComp("(- (* 2 5) (% 7 3))"))
+    assertResult(2)(ELComp("(+ 1 t)"))
+  } 
   
-  // test("correctly compile relational expressions") {
-  //   assertResult(1)(ELComp("(< 1 2)"))
-  //   assertResult(0)(ELComp("(> 3 (+ 4 5))"))
-  //   assertResult(1)(ELComp("(== (* 2 2) (/ 8 2))"))
-  //   assertResult(0)(ELComp("(== t f)"))
-  //   assertResult(0)(ELComp("(> 1 t)"))
-  //   assertResult(0)(ELComp("(< 1 t)"))
-  //   assertResult(1)(ELComp("(== 1 t)"))
-  // } 
+  test("correctly compile relational expressions") {
+    assertResult(1)(ELComp("(< 1 2)"))
+    assertResult(0)(ELComp("(> 3 (+ 4 5))"))
+    assertResult(1)(ELComp("(== (* 2 2) (/ 8 2))"))
+    assertResult(0)(ELComp("(== t f)"))
+    assertResult(0)(ELComp("(> 1 t)"))
+    assertResult(0)(ELComp("(< 1 t)"))
+    assertResult(1)(ELComp("(== 1 t)"))
+  } 
   
   // test("correctly compile if expressions") {
   //   assertResult(2)(ELComp("(if (not f) 2 3)"))

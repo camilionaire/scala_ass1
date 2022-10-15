@@ -25,28 +25,56 @@ object ELComp {
         Swap ::
         Pop::Nil
       )
-    } // ... need code ...
+    } // done
     case And(l,r) => {
       compile(l) :::
       compile(r) :::
       SAnd::Nil
-      } // ... need code ...
+      } // done
     case Or(l,r)  => {
       compile(l) ::: compile(r) ::: SOr::Nil
-      } // ... need code ...
+      } // done
     case Xor(l,r) => {
       val left = compile(l)
       val right = compile(r)
       left ::: right ::: (SOr::Nil) ::: left ::: right ::: (SAnd::Nil) ::: (Const(-1)::Nil) ::: (SMul::Nil) ::: (SAdd::Nil)
+      } // done
+    case Add(e1,e2) => {
+      compile(e1) ::: compile(e2) ::: (SAdd::Nil)
+      } // done
+    case Sub(e1,e2) => {
+      compile(e1) ::: compile(e2) ::: (Const(-1)::Nil) ::: (SMul::Nil) ::: (SAdd::Nil)
+      } // done, i think
+    case Mul(e1,e2) => {
+      compile(e1) ::: compile(e2) ::: (SMul::Nil)
+      } // done
+    case Div(e1,e2) => {
+      compile(e1) ::: compile(e2) ::: (Divrem::Nil) ::: (Pop::Nil)
       } // ... need code ...
-    // case Add(e1,e2) => // ... need code ...
-    // case Sub(e1,e2) => // ... need code ...
-    // case Mul(e1,e2) => // ... need code ...
-    // case Div(e1,e2) => // ... need code ...
-    // case Rem(e1,e2) => // ... need code ...
-    // case Gt(e1,e2)  => // ... need code ...
-    // case Lt(e1,e2)  => // ... need code ...
-    // case Eq(e1,e2)  => // ... need code ...
+    case Rem(e1,e2) => {
+      compile(e1) ::: compile(e2) ::: (Divrem::Nil) ::: (Swap::Nil) ::: (Pop::Nil)
+      } // ... need code ...
+    case Gt(e1,e2)  => {
+      val lab1 = newLabel()
+      val lab2 = newLabel()
+      compile(e1) ::: compile(e2) ::: (Const(-1)::Nil) ::: (SMul::Nil) ::: 
+      (SAdd::Nil) ::: (Ifgt(lab1)::Nil) ::: (Const(0)::Nil) ::: 
+      (Goto(lab2)::Nil) ::: (Label(lab1)::Nil) ::: (Const(1)::Nil) ::: (Label(lab2)::Nil)
+      } // ... need code ...
+    case Lt(e1,e2)  => {
+      val lab1 = newLabel()
+      val lab2 = newLabel()
+      compile(e1) ::: compile(e2) ::: (Swap::Nil) ::: (Const(-1)::Nil) ::: 
+      (SMul::Nil) ::: (SAdd::Nil) ::: (Ifgt(lab1)::Nil) ::: (Const(0)::Nil) ::: 
+      (Goto(lab2)::Nil) ::: (Label(lab1)::Nil) ::: (Const(1)::Nil) ::: (Label(lab2)::Nil)
+      }// ... need code ...
+    case Eq(e1,e2)  => {
+      val lab1 = newLabel()
+      val lab2 = newLabel()
+      compile(e1) ::: compile(e2) ::: (Const(-1)::Nil) ::: 
+      (SMul::Nil) ::: (SAdd::Nil) ::: (Ifz(lab1)::Nil) ::: (Const(0)::Nil) ::: 
+      (Goto(lab2)::Nil) ::: (Label(lab1)::Nil) ::: (Const(1)::Nil) ::: (Label(lab2)::Nil)
+      }// ... need code ...
     // case If(c,t,f) => // ... need code ...
     case _ => throw CompileException("Illegal expr:" + e)
   }
