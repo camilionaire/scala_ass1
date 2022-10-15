@@ -9,15 +9,23 @@ object ELInterp {
   case class InterpException(string: String) extends RuntimeException
 
   // unwraping function, throws an error if not a left, 
-  // returns the 
+  // returns the boolean unwrapped.
   def boolOrError(e: Either[Boolean, Int]): Boolean = e match {
     case Left(b) => b
     case _ => throw InterpException("We need a bool but we got: " + e)
   }
 
+  // unwraping function, throws an error if not a right, 
+  // returns the integer unwrapped.
   def intOrError(e: Either[Boolean, Int]): Int = e match {
     case Right(i) => i
     case _ => throw InterpException("We need an int but we got: " + e)
+  }
+
+  // returns true if bool, false if int.
+  def boolOrFalse(e: Either[Boolean, Int]): Boolean = e match {
+    case Left(b) => true
+    case Right(i) => false
   }
   
   def interp(e:Expr): Either[Boolean,Int] = e match {
@@ -31,16 +39,39 @@ object ELInterp {
       val lft = boolOrError(interp(l))
       val rgt = boolOrError(interp(r))
       Left((lft && (!rgt)) || ((!lft) && rgt))
-      }// ... need code ...
-    // case Add(l,r) => // ... need code ...
-    // case Sub(l,r) => // ... need code ...
-    // case Mul(l,r) => // ... need code ...
-    // case Div(l,r) => // ... need code ...
-    // case Rem(l,r) => // ... need code ...
-    // case Lt(l,r) => // ... need code ...
-    // case Gt(l,r) => // ... need code ...
-    // case Eq(l,r) => {}// ... need code ...
-    // case If(c,l,r) => // ... need code ... 
+      } // done
+    case Add(l,r) => Right(intOrError(interp(l)) + intOrError(interp(r))) // done
+    case Sub(l,r) => Right(intOrError(interp(l)) - intOrError(interp(r))) // done
+    case Mul(l,r) => Right(intOrError(interp(l)) * intOrError(interp(r))) // done
+    case Div(l,r) => {
+      val lft = intOrError(interp(l))
+      val rgt = intOrError(interp(r))
+      if (rgt == 0) throw InterpException("Can't div by zero, it's infinite!")
+      else Right(lft / rgt)
+      } // done
+    case Rem(l,r) => { 
+      val lft = intOrError(interp(l))
+      val rgt = intOrError(interp(r))
+      if (rgt == 0) throw InterpException("Can't rem by zero, it's infinite!")
+      else Right(lft % rgt)
+      } // done
+    case Lt(l,r) => Left(intOrError(interp(l)) < intOrError(interp(r))) // done
+    case Gt(l,r) => Left(intOrError(interp(l)) > intOrError(interp(r))) // done
+    case Eq(l,r) => {
+      val lftw = interp(l)
+      val rgtw = interp(r)
+      if (boolOrFalse(lftw) && boolOrFalse(rgtw)) {
+        return Left(boolOrError(lftw) == boolOrError(rgtw))
+      } else if ((!boolOrFalse(lftw)) && (!boolOrFalse(rgtw))) {
+        return Left(intOrError(lftw) == intOrError(rgtw))
+      } else {
+        throw InterpException("Can't compare Ints and Bools!")
+      }
+    } // done
+    case If(c,l,r) => {
+      if (boolOrError(interp(c))) Right(intOrError(interp(l)))
+      else Right(intOrError(interp(r))) 
+      } // done, i think.
     case _ => throw InterpException("Illegal expr:" + e)
   }
 
