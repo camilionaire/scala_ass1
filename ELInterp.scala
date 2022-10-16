@@ -3,6 +3,14 @@
 // Usage: linux> scala ELInterp <source file>
 //
 //
+////////////////////////////////////////////////////////////////////////////////
+// Name: Camilo Schaser-Hughes
+// Class: CS558, Prog Languages
+// Date: Oct 15, 2022
+// Worked in a study group with Nick Giampietro, Aung Baw and 
+// Rhitabrat Pokharel where it was Nick's idea about the unwrapping helper
+// functions. All the code is my own tho.
+////////////////////////////////////////////////////////////////////////////////
 import ExpLang._
 
 object ELInterp {
@@ -28,6 +36,8 @@ object ELInterp {
     case Right(i) => false
   }
   
+  // these mostly just unwrap the objects, does the calculations
+  // and then rewraps them and sends them on their way.
   def interp(e:Expr): Either[Boolean,Int] = e match {
     case True => Left(true)
     case False => Left(false)
@@ -43,6 +53,8 @@ object ELInterp {
     case Add(l,r) => Right(intOrError(interp(l)) + intOrError(interp(r))) // done
     case Sub(l,r) => Right(intOrError(interp(l)) - intOrError(interp(r))) // done
     case Mul(l,r) => Right(intOrError(interp(l)) * intOrError(interp(r))) // done
+    // for div and rem just stores the unwrapped elements while they
+    // check to see if r == 0.
     case Div(l,r) => {
       val lft = intOrError(interp(l))
       val rgt = intOrError(interp(r))
@@ -57,6 +69,8 @@ object ELInterp {
       } // done
     case Lt(l,r) => Left(intOrError(interp(l)) < intOrError(interp(r))) // done
     case Gt(l,r) => Left(intOrError(interp(l)) > intOrError(interp(r))) // done
+    // uses a true false helper function to check if it's bool or int
+    // before using the unwrapper function and doing the actual == checking.
     case Eq(l,r) => {
       val lftw = interp(l)
       val rgtw = interp(r)

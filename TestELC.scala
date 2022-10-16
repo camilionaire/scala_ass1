@@ -49,18 +49,18 @@ class TestELC extends FunSuite {
     assertResult(1)(ELComp("(== 1 t)"))
   } 
   
-  // test("correctly compile if expressions") {
-  //   assertResult(2)(ELComp("(if (not f) 2 3)"))
-  //   assertResult(3)(ELComp("(if (> 4 5) 2 3)"))
-  //   assertResult(1)(ELComp("(if t t t)"))
-  //   assertResult(2)(ELComp("(if 1 2 3)"))
-  //   assertResult(0)(ELComp("(if t f 4)"))
-  // } 
+  test("correctly compile if expressions") {
+    assertResult(2)(ELComp("(if (not f) 2 3)"))
+    assertResult(3)(ELComp("(if (> 4 5) 2 3)"))
+    assertResult(1)(ELComp("(if t t t)"))
+    assertResult(2)(ELComp("(if 1 2 3)"))
+    assertResult(0)(ELComp("(if t f 4)"))
+  } 
   
-  // // exception cases
-  // test("divide-by-zero exceptions") {
-  //   intercept[ExecException] { ELComp("(/ 1 0)") }
-  //   intercept[ExecException] { ELComp("(% 1 (- 5 5))") }
-  // }
+  // exception cases
+  test("divide-by-zero exceptions") {
+    intercept[ExecException] { ELComp("(/ 1 0)") }
+    intercept[ExecException] { ELComp("(% 1 (- 5 5))") }
+  }
 
 }

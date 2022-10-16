@@ -1,0 +1,20 @@
+Name: Camilo Schaser-Hughes
+Class: CS558 - Programming Languages, Prof. Li
+Date: October 15, 2022
+Assignment 1: Interpreter and Compiler
+
+Status of Programs:
+All of the programs and functionality is working.  I am currently
+in the process of looking everything over and maybe refactoring some
+things, but it all appears to at least pass all of the tests.
+
+Experience and Lessons:
+Most of the issues that I encountered were mostly about me not quite
+knowing what I was doing as opposed to some logical turn taking.
+With getting the idea from the study group I am in to use a unwrapper 
+function helped a lot for the interpreter making it easily into a sort
+of functional programming style.
+The second half for the compiler, it was a little tricky just getting
+all of the list to work and connect alright.  But once I did and I figured
+out the calls that I'm able to call, it became real easy getting that
+stack logic going. Not turned out to be one of the trickiest ones.
