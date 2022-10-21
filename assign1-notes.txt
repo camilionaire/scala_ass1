@@ -18,3 +18,6 @@ The second half for the compiler, it was a little tricky just getting
 all of the list to work and connect alright.  But once I did and I figured
 out the calls that I'm able to call, it became real easy getting that
 stack logic going. Not turned out to be one of the trickiest ones.
+So then, last minute, was chatting about the assignment and came to the 
+realization that for the xor function was compiling twice still, so
+changed up the function and resubmitted.
