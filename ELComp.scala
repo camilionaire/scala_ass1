@@ -47,10 +47,8 @@ object ELComp {
     // compiles the left and right and then does the 
     // or the the two, then an and and subtracts the two
     case Xor(l,r) => {
-      val left = compile(l)
-      val right = compile(r)
-      left ::: right ::: (SOr::Nil) ::: left ::: right ::: 
-      (SAnd :: Const(-1) :: SMul :: SAdd::Nil)
+      compile(l) ::: compile(r) ::: 
+      (SAdd :: Const(2) :: Divrem :: Swap :: Pop::Nil)
       } // done
     // just does an add
     case Add(e1,e2) => {
